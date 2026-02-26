@@ -5,6 +5,7 @@ import java.util.List;
 import org.springframework.stereotype.Service;
 
 import com.example.taskmanager.enums.TaskStatus;
+import com.example.taskmanager.exception.ResourceNotFoundException;
 import com.example.taskmanager.model.Project;
 import com.example.taskmanager.model.Task;
 import com.example.taskmanager.repository.ProjectRepository;
@@ -24,7 +25,7 @@ public class TaskService {
 	public Task createTask(Long projectId, Task task) {
 
 		Project project = projectRepository.findById(projectId)
-				.orElseThrow(() -> new RuntimeException("Project not found with id " + projectId));
+				.orElseThrow(() -> new ResourceNotFoundException("Project not found with id " + projectId));
 
 		if (task.getStatus() == null) {
 			task.setStatus(TaskStatus.TODO);
@@ -35,6 +36,9 @@ public class TaskService {
 	}
 
 	public List<Task> getTasksByProject(Long projectId) {
+		if (!taskRepository.existsById(projectId)) {
+			throw new ResourceNotFoundException("Task not found with id " + projectId);
+		}
 		return taskRepository.findByProjectId(projectId);
 	}
 
@@ -44,13 +48,16 @@ public class TaskService {
 
 	public Task updateTaskStatus(Long taskId, TaskStatus status) {
 		Task task = taskRepository.findById(taskId)
-				.orElseThrow(() -> new RuntimeException("Task not found with id " + taskId));
+				.orElseThrow(() -> new ResourceNotFoundException("Task not found with id " + taskId));
 
 		task.setStatus(status);
 		return taskRepository.save(task);
 	}
 
 	public void deleteTask(Long taskId) {
+		if (!taskRepository.existsById(taskId)) {
+			throw new ResourceNotFoundException("Task not found with id " + taskId);
+		}
 		taskRepository.deleteById(taskId);
 	}
 }

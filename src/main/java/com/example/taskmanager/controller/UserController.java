@@ -15,6 +15,8 @@ import org.springframework.web.bind.annotation.RestController;
 import com.example.taskmanager.model.User;
 import com.example.taskmanager.service.UserService;
 
+import jakarta.validation.Valid;
+
 @RestController
 @RequestMapping("/users")
 public class UserController {
@@ -26,7 +28,7 @@ public class UserController {
 	}
 
 	@PostMapping
-	public User createUser(@RequestBody User user) {
+	public User createUser(@Valid @RequestBody User user) {
 		return service.createUser(user);
 	}
 
@@ -41,7 +43,7 @@ public class UserController {
 	}
 
 	@PutMapping("/{id}")
-	public User updateUser(@PathVariable Long id, @RequestBody User user) {
+	public User updateUser(@PathVariable Long id, @Valid @RequestBody User user) {
 		return service.updateUser(id, user);
 	}
 

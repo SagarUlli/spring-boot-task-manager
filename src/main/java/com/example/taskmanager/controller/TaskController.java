@@ -15,6 +15,8 @@ import com.example.taskmanager.enums.TaskStatus;
 import com.example.taskmanager.model.Task;
 import com.example.taskmanager.service.TaskService;
 
+import jakarta.validation.Valid;
+
 @RestController
 public class TaskController {
 
@@ -25,7 +27,7 @@ public class TaskController {
 	}
 
 	@PostMapping("/projects/{projectId}/tasks")
-	public Task createTask(@PathVariable Long projectId, @RequestBody Task task) {
+	public Task createTask(@PathVariable Long projectId, @Valid @RequestBody Task task) {
 		return service.createTask(projectId, task);
 	}
 

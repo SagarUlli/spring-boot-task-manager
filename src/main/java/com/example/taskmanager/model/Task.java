@@ -11,27 +11,31 @@ import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
+import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.NotNull;
 import lombok.Data;
 
 @Entity
 @Data
 public class Task {
 
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
+	@Id
+	@GeneratedValue(strategy = GenerationType.IDENTITY)
+	private Long id;
 
-    private String title;
+	@NotBlank
+	private String title;
 
-    private String description;
+	private String description;
 
-    @Enumerated(EnumType.STRING)
-    private TaskStatus status;
+	@Enumerated(EnumType.STRING)
+	private TaskStatus status;
 
-    @Enumerated(EnumType.STRING)
-    private TaskPriority priority;
+	@NotNull
+	@Enumerated(EnumType.STRING)
+	private TaskPriority priority;
 
-    @ManyToOne
-    @JoinColumn(name = "project_id", nullable = false)
-    private Project project;
+	@ManyToOne
+	@JoinColumn(name = "project_id", nullable = false)
+	private Project project;
 }

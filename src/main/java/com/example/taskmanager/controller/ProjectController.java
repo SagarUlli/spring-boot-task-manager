@@ -12,6 +12,8 @@ import org.springframework.web.bind.annotation.RestController;
 import com.example.taskmanager.model.Project;
 import com.example.taskmanager.service.ProjectService;
 
+import jakarta.validation.Valid;
+
 @RestController
 public class ProjectController {
 
@@ -22,7 +24,7 @@ public class ProjectController {
 	}
 
 	@PostMapping("/users/{userId}/projects")
-	public Project createProject(@PathVariable Long userId, @RequestBody Project project) {
+	public Project createProject(@PathVariable Long userId, @Valid @RequestBody Project project) {
 		return service.createProject(userId, project);
 	}
 
