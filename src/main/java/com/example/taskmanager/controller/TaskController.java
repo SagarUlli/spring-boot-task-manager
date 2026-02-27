@@ -11,6 +11,8 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.example.taskmanager.dto.TaskRequest;
+import com.example.taskmanager.dto.TaskResponse;
 import com.example.taskmanager.enums.TaskStatus;
 import com.example.taskmanager.model.Task;
 import com.example.taskmanager.service.TaskService;
@@ -27,8 +29,14 @@ public class TaskController {
 	}
 
 	@PostMapping("/projects/{projectId}/tasks")
-	public Task createTask(@PathVariable Long projectId, @Valid @RequestBody Task task) {
-		return service.createTask(projectId, task);
+	public TaskResponse createTask(@PathVariable Long projectId, @Valid @RequestBody TaskRequest taskRequest) {
+		Task task = new Task();
+		task.setTitle(taskRequest.getTitle());
+		task.setDescription(taskRequest.getDescription());
+		task.setPriority(taskRequest.getPriority());
+		Task saved = service.createTask(projectId, task);
+		return new TaskResponse(saved.getId(), saved.getTitle(), saved.getDescription(), saved.getStatus(),
+				saved.getPriority(), saved.getProject().getId());
 	}
 
 	@GetMapping("/projects/{projectId}/tasks")

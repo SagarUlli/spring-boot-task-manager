@@ -9,6 +9,8 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.example.taskmanager.dto.ProjectRequest;
+import com.example.taskmanager.dto.ProjectResponse;
 import com.example.taskmanager.model.Project;
 import com.example.taskmanager.service.ProjectService;
 
@@ -24,8 +26,12 @@ public class ProjectController {
 	}
 
 	@PostMapping("/users/{userId}/projects")
-	public Project createProject(@PathVariable Long userId, @Valid @RequestBody Project project) {
-		return service.createProject(userId, project);
+	public ProjectResponse createProject(@PathVariable Long userId, @Valid @RequestBody ProjectRequest projectRequest) {
+		Project project = new Project();
+		project.setName(projectRequest.getName());
+		project.setDescription(projectRequest.getDescription());
+		Project saved = service.createProject(userId, project);
+		return new ProjectResponse(saved.getId(), saved.getName(), saved.getDescription(), saved.getOwner().getId());
 	}
 
 	@GetMapping("/projects")

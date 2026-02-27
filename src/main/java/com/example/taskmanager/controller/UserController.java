@@ -12,6 +12,8 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.example.taskmanager.dto.UserRequest;
+import com.example.taskmanager.dto.UserResponse;
 import com.example.taskmanager.model.User;
 import com.example.taskmanager.service.UserService;
 
@@ -28,8 +30,10 @@ public class UserController {
 	}
 
 	@PostMapping
-	public User createUser(@Valid @RequestBody User user) {
-		return service.createUser(user);
+	public UserResponse createUser(@Valid @RequestBody UserRequest userRequest) {
+		User user = new User(userRequest.getName(), userRequest.getEmail());
+		User saved = service.createUser(user);
+		return new UserResponse(saved.getId(), saved.getName(), saved.getEmail());
 	}
 
 	@GetMapping
