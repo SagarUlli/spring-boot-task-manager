@@ -1,0 +1,32 @@
+services:
+  mysql:
+    image: mysql:8.0
+    container_name: mysql-db
+    restart: always
+    environment:
+      # These match your .env or provide defaults
+      MYSQL_ROOT_PASSWORD: ${DB_PASSWORD}
+      MYSQL_DATABASE: taskdb
+    ports:
+      - "3307:3306"
+    healthcheck:
+      test: ["CMD", "mysqladmin", "ping", "-h", "localhost"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+
+  app:
+    build: .
+    container_name: taskmanager-app
+    depends_on:
+      mysql:
+        condition: service_healthy
+    ports:
+      - "8080:8080"
+    env_file:
+      - .env
+    environment:
+      # If your app uses different property names, map them here:
+      SRPING_DATASOURCE_URL: ${DB_URL}
+      SRPING_DATASOURCE_USERNAME: ${DB_USERNAME}
+      SRPING_DATASOURCE_PASSWORD: ${DB_PASSWORD}
