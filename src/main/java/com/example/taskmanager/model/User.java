@@ -7,10 +7,14 @@ import jakarta.persistence.Id;
 import jakarta.persistence.Table;
 import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotBlank;
-import lombok.Data;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
 
 @Entity
-@Data
+@Getter
+@Setter
+@NoArgsConstructor
 @Table(name = "users")
 public class User {
 
@@ -24,9 +28,6 @@ public class User {
 	@Email
 	@NotBlank
 	private String email;
-
-	public User() {
-	}
 
 	public User(String name, String email) {
 		this.name = name;
