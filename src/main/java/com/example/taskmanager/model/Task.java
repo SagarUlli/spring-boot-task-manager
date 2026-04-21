@@ -2,6 +2,7 @@ package com.example.taskmanager.model;
 
 import com.example.taskmanager.enums.TaskPriority;
 import com.example.taskmanager.enums.TaskStatus;
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 
 import jakarta.persistence.Entity;
 import jakarta.persistence.EnumType;
@@ -14,6 +15,7 @@ import jakarta.persistence.ManyToOne;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 import lombok.Data;
+import lombok.ToString.Exclude;
 
 @Entity
 @Data
@@ -37,5 +39,8 @@ public class Task {
 
 	@ManyToOne
 	@JoinColumn(name = "project_id", nullable = false)
+	@JsonIgnoreProperties("owner")
+	@Exclude
+	@lombok.EqualsAndHashCode.Exclude
 	private Project project;
 }
